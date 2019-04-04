@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default class Analytics extends Component {
   test = async () => {
-    const test = await axios.get('http://localhost:8080/api/bananas');
+    const test = await axios.get('http://localhost:8080/api/');
     console.log('test', test);
   }
   render() {
