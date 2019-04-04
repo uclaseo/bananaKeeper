@@ -1,0 +1,19 @@
+{
+  "name": "bananakeeper",
+  "version": "1.0.0",
+  "description": "keeps track of banana sales",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uclaseo/bananaKeeper.git"
+  },
+  "author": "Inseok Seo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uclaseo/bananaKeeper/issues"
+  },
+  "homepage": "https://github.com/uclaseo/bananaKeeper#readme"
+}
