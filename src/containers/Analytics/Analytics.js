@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { api } from '../../../config.json';
 
 export default class Analytics extends Component {
   test = async () => {
-    const test = await axios.get('http://localhost:8080/api/');
+    const test = await axios.get(`${api}/`);
     console.log('test', test);
   }
   render() {
