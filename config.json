@@ -1,3 +1,10 @@
 {
-  "api": "http://localhost:8080/api"
+  "api": "http://localhost:8080/api",
+  "price": {
+    "banana": {
+      "buy": "0.20",
+      "sell": "0.35",
+      "expire": "10"
+    }
+  }
 }
