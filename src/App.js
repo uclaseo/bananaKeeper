@@ -5,7 +5,7 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <div className='App'>
+      <div className="App">
         <h1> Hello, Banana World!</h1>
       </div>
     );
