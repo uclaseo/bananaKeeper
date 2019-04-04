@@ -10,8 +10,6 @@ import Buy from './containers/Buy/Buy';
 import Sell from './containers/Sell/Sell';
 import Analytics from './containers/Analytics/Analytics';
 
-
-
 import './App.css';
 
 class App extends Component {
