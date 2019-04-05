@@ -2,9 +2,9 @@
   "api": "http://localhost:8080/api",
   "price": {
     "banana": {
-      "buy": "0.20",
-      "sell": "0.35",
-      "expire": "10"
+      "buyValue": "0.20",
+      "sellValue": "0.35",
+      "expireDays": "10"
     }
   }
 }
