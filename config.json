@@ -1,6 +1,6 @@
 {
   "api": "http://localhost:8080/api",
-  "price": {
+  "items": {
     "banana": {
       "buyValue": "0.20",
       "sellValue": "0.35",

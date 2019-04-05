@@ -9,8 +9,10 @@
 
 .primaryColor {
   color: rgb(42, 55, 148);
+  font-weight: bold;
 }
 
 .secondaryColor {
   color: rgb(242, 58, 47);
+  font-weight: bold;
 }
