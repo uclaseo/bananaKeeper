@@ -14,40 +14,55 @@ import {
   api,
   items,
 } from '../../../config.json';
-
 import styles from './Analytics.css';
 
 export default class Analytics extends Component {
   state = {
     currentDate: moment().format('YYYY-MM-DD'),
-    bananas: [],
-    unexpiredBananas: [],
-    expiredBananas: [],
-    remainingUnexpiredBananasValue: 0,
-    remainingExpiredBananasValue: 0,
-    soldBananaCount: 0,
+    badBananas: [],
+    goodBananas: [],
+    remainingGoodBananasValue: 0,
+    remainingBadBananasValue: 0,
+    soldBananasCount: 0,
     totalSoldValue: 0,
     totalNetValue: 0,
   };
 
-  async componentDidMount() {
-    const bananas = await this.fetchBananas();
+  componentDidMount() {
+    this.initializeData();
+  }
 
-    const { unexpiredBananas, expiredBananas, soldBananas } = this.filterBananas(bananas);
-    const soldBananaCount = soldBananas.length;
-    const remainingUnexpiredBananasValue = this.calculateValue(unexpiredBananas.length, items.banana.buyValue);
-    const remainingExpiredBananasValue = this.calculateValue(expiredBananas.length, items.banana.buyValue);
-    
-    const totalSoldValue = this.calculateValue(soldBananaCount, items.banana.sellValue);
-    const totalNetValue = this.calculateNetValue(bananas.length, soldBananaCount);
+  initializeData = async () => {
+    const bananas = await this.fetchBananas();
+    const {
+      banana: {
+        buyValue,
+        sellValue,
+      },
+    } = items;
+
+    const {
+      badBananas,
+      goodBananas,
+      soldBananas,
+    } = this.filterBananas(bananas);
+
+    const goodBananasCount = goodBananas.length;
+    const badBananasCount = badBananas.length;
+    const soldBananasCount = soldBananas.length;
+    const totalBananasCount = bananas.length;
+
+    const remainingGoodBananasValue = this.calculateValue(goodBananasCount, sellValue);
+    const remainingBadBananasValue = this.calculateValue(badBananasCount, buyValue);
+    const totalSoldValue = this.calculateValue(soldBananasCount, sellValue);
+    const totalNetValue = this.calculateNetValue(totalBananasCount, soldBananasCount);
 
     this.setState({
-      bananas,
-      unexpiredBananas,
-      expiredBananas,
-      remainingUnexpiredBananasValue,
-      remainingExpiredBananasValue,
-      soldBananaCount,
+      badBananas,
+      goodBananas,
+      remainingGoodBananasValue,
+      remainingBadBananasValue,
+      soldBananasCount,
       totalSoldValue,
       totalNetValue,
     });
@@ -61,31 +76,32 @@ export default class Analytics extends Component {
 
   filterBananas = (bananas) => {
     const { currentDate } = this.state;
-    const unexpiredBananas = [];
-    const expiredBananas = [];
+    const today = moment(currentDate);
+
+    const badBananas = [];
+    const goodBananas = [];
     const soldBananas = [];
     bananas.forEach((banana) => {
       if (banana.sellDate) {
-        soldBananas.push(banana);
+        return soldBananas.push(banana);
       }
-      const today = moment(currentDate);
       const expiringDate = this.calculateExpiringDate(banana.buyDate);
       const isBananaExpired = today.isAfter(expiringDate);
       if (isBananaExpired) {
-        return expiredBananas.push(banana);
+        return badBananas.push(banana);
       }
-      return unexpiredBananas.push(banana);
+      return goodBananas.push(banana);
     });
     return {
-      unexpiredBananas,
-      expiredBananas,
+      badBananas,
+      goodBananas,
       soldBananas,
     };
   }
 
   calculateExpiringDate = (buyDate) => {
     const purchasedDate = moment(buyDate);
-    const expiringDate = purchasedDate.add(10, 'day');
+    const expiringDate = purchasedDate.add(items.banana.expireDays, 'day');
     return expiringDate;
   }
   
@@ -94,28 +110,34 @@ export default class Analytics extends Component {
   }
 
   calculateNetValue = (totalCount, soldCount) => {
-    return (soldCount * 0.35 - totalCount * 0.20).toFixed(2);
+    const {
+      banana: {
+        buyValue,
+        sellValue,
+      },
+    } = items;
+    return (soldCount * sellValue - totalCount * buyValue).toFixed(2);
   }
 
   render() {
     const {
       currentDate,
-      unexpiredBananas,
-      expiredBananas,
-      remainingUnexpiredBananasValue,
-      remainingExpiredBananasValue,
-      soldBananaCount,
+      badBananas,
+      goodBananas,
+      remainingGoodBananasValue,
+      remainingBadBananasValue,
+      soldBananasCount,
       totalSoldValue,
       totalNetValue,
     } = this.state;
-    const isProfit = totalNetValue > 0;
-  
+    const isProfit = totalNetValue >= 0;
     return (
       <Paper
         className={styles.analyticsContainer}
         elevation={0}
       >
         <Table>
+
           <TableHead>
             <TableRow>
               <TableCell>{currentDate}</TableCell>
@@ -123,28 +145,49 @@ export default class Analytics extends Component {
               <TableCell>$</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             <TableRow hover>
               <TableCell>Unexpired Bananas</TableCell>
-              <TableCell>{unexpiredBananas.length}</TableCell>
-              <TableCell><span className={styles.primaryColor}>{remainingUnexpiredBananasValue}</span></TableCell>
+              <TableCell>{goodBananas.length}</TableCell>
+              <TableCell>
+                <span className={styles.primaryColor}>
+                  {remainingGoodBananasValue}
+                </span>
+              </TableCell>
             </TableRow>
+
             <TableRow hover>
               <TableCell>Expired Bananas</TableCell>
-              <TableCell>{expiredBananas.length}</TableCell>
-              <TableCell><span className={styles.secondaryColor}>{remainingExpiredBananasValue}</span></TableCell>
+              <TableCell>{badBananas.length}</TableCell>
+              <TableCell>
+                <span className={styles.secondaryColor}>
+                  -{remainingBadBananasValue}
+                </span>
+              </TableCell>
             </TableRow>
+
             <TableRow hover>
               <TableCell>Sold Bananas</TableCell>
-              <TableCell>{soldBananaCount}</TableCell>
-              <TableCell><span className={styles.primaryColor}>{totalSoldValue}</span></TableCell>
+              <TableCell>{soldBananasCount}</TableCell>
+              <TableCell>
+                <span className={styles.primaryColor}>
+                  {totalSoldValue}
+                </span>
+              </TableCell>
             </TableRow>
+
             <TableRow hover>
               <TableCell />
               <TableCell>Profit</TableCell>
-              <TableCell><span className={isProfit ? styles.primaryColor : styles.secondaryColor}>{totalNetValue}</span></TableCell>
+              <TableCell>
+                <span className={isProfit ? styles.primaryColor : styles.secondaryColor}>
+                  {totalNetValue === '-0.00' ? '0.00' : totalNetValue}
+                </span>
+              </TableCell>
             </TableRow>
           </TableBody>
+
         </Table>
       </Paper>
     );
