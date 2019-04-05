@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   TextField,
   Button,
+  Paper,
 } from '@material-ui/core';
 import axios from 'axios';
 import moment from 'moment';
@@ -133,7 +134,10 @@ export default class Buy extends Component {
     } = this.state;
 
     return (
-      <div className={styles.formContainer}>
+      <Paper
+        className={styles.sellContainer}
+        elevation={0}
+      >
         <div className={styles.input}>
           <TextField
             label="Banana"
@@ -174,7 +178,7 @@ export default class Buy extends Component {
           </div>
 
         </div>
-      </div>
+      </Paper>
     );
   }
 };
