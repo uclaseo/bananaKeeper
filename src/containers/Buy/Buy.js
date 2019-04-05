@@ -88,7 +88,10 @@ export default class Buy extends Component {
       },
     } = this.state;
     return (
-      <Paper className={styles.formContainer} elevation={2}>
+      <Paper
+        className={styles.buyContainer}
+        elevation={0}
+      >
         <div className={styles.input}>
           <TextField
             label="Banana"

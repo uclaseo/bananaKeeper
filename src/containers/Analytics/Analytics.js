@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
 
 import {
   api,
   price,
 } from '../../../config.json';
+
+import styles from './Analytics.css';
 
 export default class Analytics extends Component {
   state = {
@@ -100,56 +110,42 @@ export default class Analytics extends Component {
     } = this.state;
   
     return (
-      <div>
-        <div>
-          Today:
-          {currentDate}
-        </div>
-
-        <div>
-          <div>
-            # of remaining unexpired:
-            {unexpiredBananas.length}
-          </div>
-          <div>
-            Total Values:
-            {remainingUnexpiredBananasValue}
-          </div>
-        </div>
-
-        <div>
-          <div>
-            # of expired bananas:
-            {expiredBananas.length}
-          </div>
-          <div>
-            Total Values Wasted:
-            {remainingExpiredBananasValue}
-          </div>
-        </div>
-
-        <div>
-          <div>
-            # of sold bananas:
-            {soldBananaCount}
-          </div>
-          <div>
-            Total Values Earned:
-            {totalSoldValue}
-          </div>
-        </div>
-
-        <div>
-          <div>
-            Net Profit / Loss:
-            {totalNetValue}
-          </div>
-        </div>
-
-        <div>
-          Table
-        </div>
-      </div>
+      <Paper
+        className={styles.analyticsContainer}
+        elevation={0}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{currentDate}</TableCell>
+              <TableCell>Number</TableCell>
+              <TableCell>$</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow hover>
+              <TableCell>Unexpired Bananas Left</TableCell>
+              <TableCell>{unexpiredBananas.length}</TableCell>
+              <TableCell>{remainingUnexpiredBananasValue}</TableCell>
+            </TableRow>
+            <TableRow hover>
+              <TableCell>Expired Bananas Left</TableCell>
+              <TableCell>{expiredBananas.length}</TableCell>
+              <TableCell>{remainingExpiredBananasValue}</TableCell>
+            </TableRow>
+            <TableRow hover>
+              <TableCell>Sold Bananas</TableCell>
+              <TableCell>{soldBananaCount}</TableCell>
+              <TableCell>{totalSoldValue}</TableCell>
+            </TableRow>
+            <TableRow hover>
+              <TableCell />
+              <TableCell>Profit</TableCell>
+              <TableCell>{totalNetValue}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 };
