@@ -5,10 +5,7 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        Home
-        <Link to='buy'>buy</Link>
-        <Link to='sell'>sell</Link>
-        <Link to='analytics'>analytics</Link>
+        Welcome to banana keeper!
       </div>
     );
   }
