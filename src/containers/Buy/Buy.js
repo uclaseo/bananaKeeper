@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import {
   TextField,
   Button,
 } from '@material-ui/core';
-import axios from 'axios';
-
 import { api } from '../../../config.json';
+import styles from './Buy.css';
 
 export default class Buy extends Component {
   state = {
@@ -44,7 +44,7 @@ export default class Buy extends Component {
 
     return (
       <div>
-        <form className="buyForm" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+        <form className={styles.container} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
           <TextField
             label="banana"
             value={bananaCount}
@@ -64,4 +64,4 @@ export default class Buy extends Component {
       </div>
     );
   }
-};
+}

@@ -84,7 +84,7 @@ export default class Buy extends Component {
     } = this.state;
 
     return (
-      <div>
+      <div className="container">
         <form className="buyForm" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
           <TextField
             label="banana"
