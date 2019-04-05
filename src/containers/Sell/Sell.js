@@ -4,6 +4,7 @@ import {
   Button,
 } from '@material-ui/core';
 import axios from 'axios';
+import moment from 'moment';
 import { api } from '../../../config.json';
 import styles from './Sell.css';
 
@@ -14,6 +15,11 @@ export default class Buy extends Component {
     unsoldBananas: [],
     bananaCount: '',
     sellDate: '',
+    validations: {
+      bananaCountErrorMessage: '',
+      sellDateErrorMessage: '',
+      inputErrorMessage: '',
+    },
   };
 
   async componentDidMount() {
@@ -39,16 +45,54 @@ export default class Buy extends Component {
       bananaCount,
       sellDate,
     } = this.state;
-    const goodBananas = this.filterGoodBananas(unsoldBananas);
-    const goodBananasCount = goodBananas.length;
-    const hasEnoughBananas = Boolean(bananaCount <= goodBananasCount);
-    if (hasEnoughBananas) {
+    const isValidated = this.validateFields();
+    if (isValidated) {
       const response = await axios.put(`${api}/bananas`, {
         number: +bananaCount,
         sellDate,
       });
       console.log('response.data', response.data);
+    } else {
+
     }
+  }
+
+  validateFields = () => {
+    const {
+      unsoldBananas,
+      bananaCount,
+      sellDate,
+    } = this.state;
+    let bananaCountErrorMessage = '';
+    let sellDateErrorMessage = '';
+    let inputErrorMessage = '';
+    const unexpiredBananas = this.filterGoodBananas(unsoldBananas);
+    const unexpiredBananasCount = unexpiredBananas.length;
+    const hasEnoughBananas = Boolean(bananaCount <= unexpiredBananasCount);
+    if (!bananaCount || !sellDate) {
+      inputErrorMessage = 'Please enter all required fields';
+    }
+    if (!hasEnoughBananas) {
+      bananaCountErrorMessage = 'Not enough bananas left';
+    }
+    if (!Number(bananaCount)) {
+      bananaCountErrorMessage = 'Please enter valid number';
+    }
+    if (!moment(sellDate).isValid()) {
+      sellDateErrorMessage = 'Date should be in the form of YYYY-MM-DD';
+    }
+    if (bananaCountErrorMessage || sellDateErrorMessage || inputErrorMessage) {
+      this.setState({
+        validations: {
+          bananaCountErrorMessage,
+          sellDateErrorMessage,
+          inputErrorMessage,
+        },
+      });
+      return false;
+    }
+    return true;
+
   }
 
   convertDateToUTC = (date) => {
@@ -81,27 +125,55 @@ export default class Buy extends Component {
     const {
       bananaCount,
       sellDate,
+      validations: {
+        bananaCountErrorMessage,
+        sellDateErrorMessage,
+        inputErrorMessage,
+      }
     } = this.state;
 
     return (
-      <div className={styles.container}>
-        <form className="buyForm" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+      <div className={styles.formContainer}>
+        <div className={styles.input}>
           <TextField
-            label="banana"
+            label="Banana"
             value={bananaCount}
             onChange={this.handleChange('bananaCount')}
+            variant="outlined"
+            fullWidth
+            placeholder="Enter the number of bananas"
+            error={!!bananaCountErrorMessage}
+            helperText={bananaCountErrorMessage}
           />
+        </div>
+        <div className={styles.input}>
           <TextField
-            label="date"
+            label="Purchased Date"
             value={sellDate}
             onChange={this.handleChange('sellDate')}
+            variant="outlined"
+            fullWidth
+            placeholder="YYYY-MM-DD"
+            error={!!sellDateErrorMessage}
+            helperText={sellDateErrorMessage}
           />
-          <Button
-            type="submit"
-          >
-            Submit
-          </Button>
-        </form>
+        </div>
+        <div className={styles.input}>
+          <div className={styles.errorMessage}>
+            {inputErrorMessage}
+          </div>
+          <div className={styles.submitButton}>
+            <Button
+              type="submit"
+              color="primary"
+              variant="outlined"
+              onClick={this.handleSubmit}
+            >
+              Submit
+            </Button>
+          </div>
+
+        </div>
       </div>
     );
   }
