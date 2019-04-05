@@ -32,7 +32,8 @@ export default class Buy extends Component {
         bananaCount,
         buyDate,
       } = this.state;
-      const isValidated = this.validateInput();
+      const isValidated = this.validateFields();
+      console.log('isValidated', isValidated);
       if (isValidated) {
         const response = await axios.post(`${api}/bananas`, {
           number: +bananaCount,
@@ -45,8 +46,7 @@ export default class Buy extends Component {
     }
   }
 
-  validateInput = () => {
-    console.log('validateInput');
+  validateFields = () => {
     const { bananaCount, buyDate } = this.state;
     let bananaCountErrorMessage = '';
     let buyDateErrorMessage = '';
@@ -57,17 +57,20 @@ export default class Buy extends Component {
     if (bananaCount < 1 || bananaCount > 50) {
       bananaCountErrorMessage = 'Order must be 1 - 50';
     }
+    if (!Number(bananaCount)) {
+      bananaCountErrorMessage = 'Please enter valid number';
+    }
     if (!moment(buyDate).isValid()) {
       buyDateErrorMessage = 'Date should be in the form of YYYY-MM-DD';
     }
-    this.setState({
-      validations: {
-        bananaCountErrorMessage,
-        buyDateErrorMessage,
-        inputErrorMessage,
-      },
-    });
     if (bananaCountErrorMessage || buyDateErrorMessage || inputErrorMessage) {
+      this.setState({
+        validations: {
+          bananaCountErrorMessage,
+          buyDateErrorMessage,
+          inputErrorMessage,
+        },
+      });
       return false;
     }
     return true;
