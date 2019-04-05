@@ -6,3 +6,11 @@
   border-radius: 5px;
   padding: 30px;
 }
+
+.primaryColor {
+  color: rgb(42, 55, 148);
+}
+
+.secondaryColor {
+  color: rgb(242, 58, 47);
+}

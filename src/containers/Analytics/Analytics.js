@@ -108,6 +108,7 @@ export default class Analytics extends Component {
       totalSoldValue,
       totalNetValue,
     } = this.state;
+    const isProfit = totalNetValue > 0;
   
     return (
       <Paper
@@ -124,24 +125,24 @@ export default class Analytics extends Component {
           </TableHead>
           <TableBody>
             <TableRow hover>
-              <TableCell>Unexpired Bananas Left</TableCell>
+              <TableCell>Unexpired Bananas</TableCell>
               <TableCell>{unexpiredBananas.length}</TableCell>
-              <TableCell>{remainingUnexpiredBananasValue}</TableCell>
+              <TableCell><span className={styles.primaryColor}>{remainingUnexpiredBananasValue}</span></TableCell>
             </TableRow>
             <TableRow hover>
-              <TableCell>Expired Bananas Left</TableCell>
+              <TableCell>Expired Bananas</TableCell>
               <TableCell>{expiredBananas.length}</TableCell>
-              <TableCell>{remainingExpiredBananasValue}</TableCell>
+              <TableCell><span className={styles.secondaryColor}>{remainingExpiredBananasValue}</span></TableCell>
             </TableRow>
             <TableRow hover>
               <TableCell>Sold Bananas</TableCell>
               <TableCell>{soldBananaCount}</TableCell>
-              <TableCell>{totalSoldValue}</TableCell>
+              <TableCell><span className={styles.primaryColor}>{totalSoldValue}</span></TableCell>
             </TableRow>
             <TableRow hover>
               <TableCell />
               <TableCell>Profit</TableCell>
-              <TableCell>{totalNetValue}</TableCell>
+              <TableCell><span className={isProfit ? styles.primaryColor : styles.secondaryColor}>{totalNetValue}</span></TableCell>
             </TableRow>
           </TableBody>
         </Table>
