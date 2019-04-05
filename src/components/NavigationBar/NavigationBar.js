@@ -11,7 +11,6 @@ import {
   ListItemText,
   Divider,
 } from '@material-ui/core';
-
 import {
   Home,
   AddCircle,
@@ -26,82 +25,78 @@ export default class NavigationBar extends PureComponent {
   };
 
   toggleDrawer = () => {
-    this.setState((state) => {
-      return {
-        isOpen: !state.isOpen,
-      };
-    });
+    this.setState(state => ({
+      isOpen: !state.isOpen,
+    }));
   }
 
-  renderMenu = () => {
-    return (
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={this.toggleDrawer}
-        onKeyDown={this.toggleDrawer}
-        style={{
-          width: 250,
-        }}
-      >
+  renderMenu = () => (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={this.toggleDrawer}
+      onKeyDown={this.toggleDrawer}
+      style={{
+        width: 250,
+      }}
+    >
 
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <List>
-            <ListItem
-              button
-            >
-              <ListItemIcon>
-                <Home />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItem>
-          </List>
-        </Link>
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <List>
+          <ListItem
+            button
+          >
+            <ListItemIcon>
+              <Home />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+        </List>
+      </Link>
 
-        <Divider />
+      <Divider />
 
-        <Link to="buy" style={{ textDecoration: 'none' }}>
-          <List>
-            <ListItem
-              button
-            >
-              <ListItemIcon>
-                <AddCircle />
-              </ListItemIcon>
-              <ListItemText primary="Buy" />
-            </ListItem>
-          </List>
-        </Link>
+      <Link to="buy" style={{ textDecoration: 'none' }}>
+        <List>
+          <ListItem
+            button
+          >
+            <ListItemIcon>
+              <AddCircle />
+            </ListItemIcon>
+            <ListItemText primary="Buy" />
+          </ListItem>
+        </List>
+      </Link>
 
-        <Link to="sell" style={{ textDecoration: 'none' }}>
-          <List>
-            <ListItem
-              button
-            >
-              <ListItemIcon>
-                <RemoveCircle />
-              </ListItemIcon>
-              <ListItemText primary="Sell" />
-            </ListItem>
-          </List>
-        </Link>
+      <Link to="sell" style={{ textDecoration: 'none' }}>
+        <List>
+          <ListItem
+            button
+          >
+            <ListItemIcon>
+              <RemoveCircle />
+            </ListItemIcon>
+            <ListItemText primary="Sell" />
+          </ListItem>
+        </List>
+      </Link>
 
-        <Link to="analytics" style={{ textDecoration: 'none' }}>
-          <List>
-            <ListItem
-              button
-            >
-              <ListItemIcon>
-                <Assessment />
-              </ListItemIcon>
-              <ListItemText primary="Analytics" />
-            </ListItem>
-          </List>
-        </Link>
+      <Link to="analytics" style={{ textDecoration: 'none' }}>
+        <List>
+          <ListItem
+            button
+          >
+            <ListItemIcon>
+              <Assessment />
+            </ListItemIcon>
+            <ListItemText primary="Analytics" />
+          </ListItem>
+        </List>
+      </Link>
 
-      </div>
-    );
-  }
+    </div>
+  )
 
   render() {
     const { isOpen } = this.state;
@@ -110,7 +105,6 @@ export default class NavigationBar extends PureComponent {
 
         <AppBar
           position="static"
-          color="primary"
         >
           <Toolbar>
             <IconButton
