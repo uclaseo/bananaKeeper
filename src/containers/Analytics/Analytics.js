@@ -22,7 +22,6 @@ export default class Analytics extends Component {
 
   async componentDidMount() {
     const bananas = await this.fetchBananas();
-    console.log('bananas', bananas);
 
     const { unexpiredBananas, expiredBananas, soldBananas } = this.filterBananas(bananas);
     const soldBananaCount = soldBananas.length;
@@ -31,13 +30,7 @@ export default class Analytics extends Component {
     
     const totalSoldValue = this.calculateValue(soldBananaCount, price.banana.sellValue);
     const totalNetValue = this.calculateNetValue(bananas.length, soldBananaCount);
-    console.log('unexpired', unexpiredBananas);
-    console.log('expired', expiredBananas);
-    console.log('remainingUnexpiredBananasValue', remainingUnexpiredBananasValue);
-    console.log('remainingExpiredBananasValue', remainingExpiredBananasValue);
-    console.log('soldBananaCount', soldBananaCount);
-    console.log('totalSoldValue', totalSoldValue);
-    console.log('totalNetValue', totalNetValue);
+
     this.setState({
       bananas,
       unexpiredBananas,
@@ -87,8 +80,6 @@ export default class Analytics extends Component {
   }
   
   calculateValue = (number, value) => {
-    console.log('number', number)
-    console.log('value', value);
     return (number * value).toFixed(2);
   }
 
