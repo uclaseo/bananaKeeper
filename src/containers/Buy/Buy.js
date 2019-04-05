@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import {
   TextField,
   Button,
@@ -11,6 +12,11 @@ export default class Buy extends Component {
   state = {
     bananaCount: '',
     buyDate: '',
+    validations: {
+      bananaCountErrorMessage: '',
+      buyDateErrorMessage: '',
+      inputErrorMessage: '',
+    },
   };
 
   handleChange = type => (event) => {
@@ -26,49 +32,98 @@ export default class Buy extends Component {
         bananaCount,
         buyDate,
       } = this.state;
-      const response = await axios.post(`${api}/bananas`, {
-        number: +bananaCount,
-        buyDate,
-      });
-      console.log('response.data', response.data);
+      const isValidated = this.validateInput();
+      if (isValidated) {
+        const response = await axios.post(`${api}/bananas`, {
+          number: +bananaCount,
+          buyDate,
+        });
+        console.log('response.data', response.data);
+      }
     } catch (error) {
       console.error('handleSubmit error: ', error);
     }
+  }
+
+  validateInput = () => {
+    console.log('validateInput');
+    const { bananaCount, buyDate } = this.state;
+    let bananaCountErrorMessage = '';
+    let buyDateErrorMessage = '';
+    let inputErrorMessage = '';
+    if (!bananaCount || !buyDate) {
+      inputErrorMessage = 'Please enter all required fields';
+    }
+    if (bananaCount < 1 || bananaCount > 50) {
+      bananaCountErrorMessage = 'Order must be 1 - 50';
+    }
+    if (!moment(buyDate).isValid()) {
+      buyDateErrorMessage = 'Date should be in the form of YYYY-MM-DD';
+    }
+    this.setState({
+      validations: {
+        bananaCountErrorMessage,
+        buyDateErrorMessage,
+        inputErrorMessage,
+      },
+    });
+    if (bananaCountErrorMessage || buyDateErrorMessage || inputErrorMessage) {
+      return false;
+    }
+    return true;
   }
 
   render() {
     const {
       bananaCount,
       buyDate,
+      validations: {
+        bananaCountErrorMessage,
+        buyDateErrorMessage,
+        inputErrorMessage,
+      },
     } = this.state;
     return (
       <div className={styles.formContainer}>
         <div className={styles.input}>
           <TextField
-            label="banana"
+            label="Banana"
             value={bananaCount}
             onChange={this.handleChange('bananaCount')}
             variant="outlined"
             fullWidth
-            placeholder="Enter number of banana"
+            placeholder="Enter the number of bananas"
+            error={!!bananaCountErrorMessage}
+            helperText={bananaCountErrorMessage}
           />
         </div>
         <div className={styles.input}>
           <TextField
-            label="date"
+            label="Purchased Date"
             value={buyDate}
             onChange={this.handleChange('buyDate')}
             variant="outlined"
             fullWidth
             placeholder="YYYY-MM-DD"
+            error={!!buyDateErrorMessage}
+            helperText={buyDateErrorMessage}
           />
         </div>
         <div className={styles.input}>
-          <Button
-            type="submit"
-          >
-            Submit
-          </Button>
+          <div className={styles.errorMessage}>
+            {inputErrorMessage}
+          </div>
+          <div className={styles.submitButton}>
+            <Button
+              type="submit"
+              color="primary"
+              variant="outlined"
+              onClick={this.handleSubmit}
+            >
+              Submit
+            </Button>
+          </div>
+
         </div>
       </div>
     );
