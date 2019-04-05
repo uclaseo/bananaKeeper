@@ -95,10 +95,10 @@ export default class Buy extends Component {
       sellDateErrorMessage = 'Date should be in the form of YYYY-MM-DD';
     }
     const hasValidationErrors = Boolean(
-      bananaCountErrorMessage ||
-      sellDateErrorMessage ||
-      inputErrorMessage
-    )
+      bananaCountErrorMessage
+      || sellDateErrorMessage
+      || inputErrorMessage,
+    );
     this.setState({
       validations: {
         bananaCountErrorMessage,
@@ -192,4 +192,4 @@ export default class Buy extends Component {
       </Paper>
     );
   }
-};
+}

@@ -104,10 +104,8 @@ export default class Analytics extends Component {
     const expiringDate = purchasedDate.add(items.banana.expireDays, 'day');
     return expiringDate;
   }
-  
-  calculateValue = (number, value) => {
-    return (number * value).toFixed(2);
-  }
+
+  calculateValue = (number, value) => { ((number * value).toFixed(2)); }
 
   calculateNetValue = (totalCount, soldCount) => {
     const {
@@ -162,7 +160,8 @@ export default class Analytics extends Component {
               <TableCell>{badBananas.length}</TableCell>
               <TableCell>
                 <span className={styles.secondaryColor}>
-                  -{remainingBadBananasValue}
+                  -
+                  {remainingBadBananasValue}
                 </span>
               </TableCell>
             </TableRow>
@@ -192,4 +191,4 @@ export default class Analytics extends Component {
       </Paper>
     );
   }
-};
+}
