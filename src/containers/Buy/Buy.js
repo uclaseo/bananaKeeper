@@ -32,7 +32,7 @@ export default class Buy extends Component {
       });
       console.log('response.data', response.data);
     } catch (error) {
-      console.log('handleSubmit error: ', error);
+      console.error('handleSubmit error: ', error);
     }
   }
 
@@ -41,26 +41,35 @@ export default class Buy extends Component {
       bananaCount,
       buyDate,
     } = this.state;
-
     return (
-      <div>
-        <form className={styles.container} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+      <div className={styles.formContainer}>
+        <div className={styles.input}>
           <TextField
             label="banana"
             value={bananaCount}
             onChange={this.handleChange('bananaCount')}
+            variant="outlined"
+            fullWidth
+            placeholder="Enter number of banana"
           />
+        </div>
+        <div className={styles.input}>
           <TextField
             label="date"
             value={buyDate}
             onChange={this.handleChange('buyDate')}
+            variant="outlined"
+            fullWidth
+            placeholder="YYYY-MM-DD"
           />
+        </div>
+        <div className={styles.input}>
           <Button
             type="submit"
           >
             Submit
           </Button>
-        </form>
+        </div>
       </div>
     );
   }

@@ -4,8 +4,8 @@ import {
   Button,
 } from '@material-ui/core';
 import axios from 'axios';
-
 import { api } from '../../../config.json';
+import styles from './Sell.css';
 
 const tenDays = 864000000;
 
@@ -84,7 +84,7 @@ export default class Buy extends Component {
     } = this.state;
 
     return (
-      <div className="container">
+      <div className={styles.container}>
         <form className="buyForm" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
           <TextField
             label="banana"

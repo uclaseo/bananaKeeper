@@ -13,21 +13,23 @@ import Buy from './containers/Buy/Buy';
 import Sell from './containers/Sell/Sell';
 import Analytics from './containers/Analytics/Analytics';
 
-import './App.css';
+import styles from './App.css';
 
 class App extends Component {
   render() {
     return (
-      <Router>
-        <CssBaseline />
-        <NavigationBar />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/buy" component={Buy} />
-          <Route path="/sell" component={Sell} />
-          <Route path="/analytics" component={Analytics} />
-        </Switch>
-      </Router>
+      <div className={styles.app}>
+        <Router>
+          <CssBaseline />
+          <NavigationBar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/buy" component={Buy} />
+            <Route path="/sell" component={Sell} />
+            <Route path="/analytics" component={Analytics} />
+          </Switch>
+        </Router>
+      </div>
     );
   }
 }
