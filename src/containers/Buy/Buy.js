@@ -18,6 +18,7 @@ export default class Buy extends Component {
       buyDateErrorMessage: '',
       inputErrorMessage: '',
     },
+    submitMessage: '',
   };
 
   handleChange = type => (event) => {
@@ -33,25 +34,31 @@ export default class Buy extends Component {
         bananaCount,
         buyDate,
       } = this.state;
+
       const isValidated = this.validateFields();
-      console.log('isValidated', isValidated);
       if (isValidated) {
         const response = await axios.post(`${api}/bananas`, {
           number: +bananaCount,
           buyDate,
         });
-        console.log('response.data', response.data);
+        this.setState({
+          submitMessage: `${response.data.length} bananas purchased on ${response.data[0].buyDate} added successfully`,
+        });
       }
     } catch (error) {
-      console.error('handleSubmit error: ', error);
+      console.error('Buy.js - handleSubmit error: ', error);
     }
   }
 
   validateFields = () => {
-    const { bananaCount, buyDate } = this.state;
+    const {
+      bananaCount,
+      buyDate,
+    } = this.state;
     let bananaCountErrorMessage = '';
     let buyDateErrorMessage = '';
     let inputErrorMessage = '';
+
     if (!bananaCount || !buyDate) {
       inputErrorMessage = 'Please enter all required fields';
     }
@@ -61,17 +68,22 @@ export default class Buy extends Component {
     if (!Number(bananaCount)) {
       bananaCountErrorMessage = 'Please enter valid number';
     }
-    if (!moment(buyDate).isValid()) {
+    if (!moment(buyDate, 'YYYY-MM-DD', true).isValid()) {
       buyDateErrorMessage = 'Date should be in the form of YYYY-MM-DD';
     }
-    if (bananaCountErrorMessage || buyDateErrorMessage || inputErrorMessage) {
-      this.setState({
-        validations: {
-          bananaCountErrorMessage,
-          buyDateErrorMessage,
-          inputErrorMessage,
-        },
-      });
+    const hasValidationErrors = Boolean(
+      bananaCountErrorMessage ||
+      buyDateErrorMessage ||
+      inputErrorMessage
+    );
+    this.setState({
+      validations: {
+        bananaCountErrorMessage,
+        buyDateErrorMessage,
+        inputErrorMessage,
+      },
+    });
+    if (hasValidationErrors) {
       return false;
     }
     return true;
@@ -86,6 +98,7 @@ export default class Buy extends Component {
         buyDateErrorMessage,
         inputErrorMessage,
       },
+      submitMessage,
     } = this.state;
     return (
       <Paper
@@ -129,6 +142,9 @@ export default class Buy extends Component {
             >
               Submit
             </Button>
+          </div>
+          <div className={styles.submitMessage}>
+            {submitMessage}
           </div>
 
         </div>
