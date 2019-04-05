@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 
-import NavigationBar from './containers/NavigationBar/NavigationBar';
+import NavigationBar from './components/NavigationBar/NavigationBar';
 import Home from './containers/Home/Home';
 import Buy from './containers/Buy/Buy';
 import Sell from './containers/Sell/Sell';
