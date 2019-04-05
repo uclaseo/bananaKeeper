@@ -4,6 +4,7 @@ import moment from 'moment';
 import {
   TextField,
   Button,
+  Paper,
 } from '@material-ui/core';
 import { api } from '../../../config.json';
 import styles from './Buy.css';
@@ -87,7 +88,7 @@ export default class Buy extends Component {
       },
     } = this.state;
     return (
-      <div className={styles.formContainer}>
+      <Paper className={styles.formContainer} elevation={2}>
         <div className={styles.input}>
           <TextField
             label="Banana"
@@ -128,7 +129,7 @@ export default class Buy extends Component {
           </div>
 
         </div>
-      </div>
+      </Paper>
     );
   }
 }
