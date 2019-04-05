@@ -82,6 +82,7 @@ export default class Buy extends Component {
         buyDateErrorMessage,
         inputErrorMessage,
       },
+      submitMessage: '',
     });
     if (hasValidationErrors) {
       return false;
@@ -112,7 +113,7 @@ export default class Buy extends Component {
             onChange={this.handleChange('bananaCount')}
             variant="outlined"
             fullWidth
-            placeholder="Enter the number of bananas"
+            placeholder="Enter number of bananas"
             error={!!bananaCountErrorMessage}
             helperText={bananaCountErrorMessage}
           />

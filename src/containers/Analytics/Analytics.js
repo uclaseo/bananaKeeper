@@ -12,7 +12,7 @@ import {
 
 import {
   api,
-  price,
+  items,
 } from '../../../config.json';
 
 import styles from './Analytics.css';
@@ -35,10 +35,10 @@ export default class Analytics extends Component {
 
     const { unexpiredBananas, expiredBananas, soldBananas } = this.filterBananas(bananas);
     const soldBananaCount = soldBananas.length;
-    const remainingUnexpiredBananasValue = this.calculateValue(unexpiredBananas.length, price.banana.buyValue);
-    const remainingExpiredBananasValue = this.calculateValue(expiredBananas.length, price.banana.buyValue);
+    const remainingUnexpiredBananasValue = this.calculateValue(unexpiredBananas.length, items.banana.buyValue);
+    const remainingExpiredBananasValue = this.calculateValue(expiredBananas.length, items.banana.buyValue);
     
-    const totalSoldValue = this.calculateValue(soldBananaCount, price.banana.sellValue);
+    const totalSoldValue = this.calculateValue(soldBananaCount, items.banana.sellValue);
     const totalNetValue = this.calculateNetValue(bananas.length, soldBananaCount);
 
     this.setState({
@@ -70,7 +70,7 @@ export default class Analytics extends Component {
       }
       const today = moment(currentDate);
       const expiringDate = this.calculateExpiringDate(banana.buyDate);
-      const isBananaExpired = Boolean(today.isAfter(expiringDate));
+      const isBananaExpired = today.isAfter(expiringDate);
       if (isBananaExpired) {
         return expiredBananas.push(banana);
       }

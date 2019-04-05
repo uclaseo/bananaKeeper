@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import moment from 'moment';
 import {
   TextField,
   Button,
   Paper,
 } from '@material-ui/core';
-import axios from 'axios';
-import moment from 'moment';
-import { api } from '../../../config.json';
-import styles from './Sell.css';
 
-const tenDays = 864000000;
+import {
+  api,
+  items,
+} from '../../../config.json';
+import styles from './Sell.css';
 
 export default class Buy extends Component {
   state = {
@@ -21,13 +23,16 @@ export default class Buy extends Component {
       sellDateErrorMessage: '',
       inputErrorMessage: '',
     },
+    submitMessage: '',
   };
 
   async componentDidMount() {
+    await this.fetchBananas();
+  }
+
+  fetchBananas = async () => {
     const response = await axios.get(`${api}/bananas`);
-    // console.log('response.data', response.data);
     const unsoldBananas = response.data.filter(banana => banana.sellDate === null);
-    // console.log('unsold bananas', unsoldBananas);
     this.setState({
       unsoldBananas,
     });
@@ -40,21 +45,27 @@ export default class Buy extends Component {
   }
 
   handleSubmit = async (event) => {
-    event.preventDefault();
-    const {
-      unsoldBananas,
-      bananaCount,
-      sellDate,
-    } = this.state;
-    const isValidated = this.validateFields();
-    if (isValidated) {
-      const response = await axios.put(`${api}/bananas`, {
-        number: +bananaCount,
+    try {
+      event.preventDefault();
+      const {
+        bananaCount,
         sellDate,
-      });
-      console.log('response.data', response.data);
-    } else {
+      } = this.state;
 
+      const isValidated = this.validateFields();
+      if (isValidated) {
+        const response = await axios.put(`${api}/bananas`, {
+          number: +bananaCount,
+          sellDate,
+        });
+        this.setState({
+          submitMessage: `${response.data.length} bananas sold on ${response.data[0].sellDate} added successfully`,
+        }, () => {
+          this.fetchBananas();
+        });
+      }
+    } catch (error) {
+      console.error('Sell.js - handleSubmit error: ', error);
     }
   }
 
@@ -67,9 +78,10 @@ export default class Buy extends Component {
     let bananaCountErrorMessage = '';
     let sellDateErrorMessage = '';
     let inputErrorMessage = '';
-    const unexpiredBananas = this.filterGoodBananas(unsoldBananas);
-    const unexpiredBananasCount = unexpiredBananas.length;
-    const hasEnoughBananas = Boolean(bananaCount <= unexpiredBananasCount);
+
+    const goodBananas = this.filterGoodBananas(unsoldBananas);
+    const goodBananasCount = goodBananas.length;
+    const hasEnoughBananas = Boolean(bananaCount <= goodBananasCount);
     if (!bananaCount || !sellDate) {
       inputErrorMessage = 'Please enter all required fields';
     }
@@ -79,45 +91,41 @@ export default class Buy extends Component {
     if (!Number(bananaCount)) {
       bananaCountErrorMessage = 'Please enter valid number';
     }
-    if (!moment(sellDate).isValid()) {
+    if (!moment(sellDate, 'YYYY-MM-DD', true).isValid()) {
       sellDateErrorMessage = 'Date should be in the form of YYYY-MM-DD';
     }
-    if (bananaCountErrorMessage || sellDateErrorMessage || inputErrorMessage) {
-      this.setState({
-        validations: {
-          bananaCountErrorMessage,
-          sellDateErrorMessage,
-          inputErrorMessage,
-        },
-      });
+    const hasValidationErrors = Boolean(
+      bananaCountErrorMessage ||
+      sellDateErrorMessage ||
+      inputErrorMessage
+    )
+    this.setState({
+      validations: {
+        bananaCountErrorMessage,
+        sellDateErrorMessage,
+        inputErrorMessage,
+      },
+      submitMessage: '',
+    });
+    if (hasValidationErrors) {
       return false;
     }
     return true;
-
   }
 
-  convertDateToUTC = (date) => {
-    const dateArray = date.split('-');
-    const year = +dateArray[0];
-    const month = +dateArray[1] - 1;
-    const day = +dateArray[2];
-    return Date.UTC(year, month, day);
+  calculateExpiringDate = (buyDate) => {
+    const purchasedDate = moment(buyDate);
+    const expiringDate = purchasedDate.add(items.banana.expireDays, 'day');
+    return expiringDate;
   }
-
-  calculateExpiringDateInUTC = (date) => {
-    const dateInUTC = this.convertDateToUTC(date);
-    return new Date(dateInUTC + tenDays);
-  };
 
   filterGoodBananas = (bananas) => {
     const { sellDate } = this.state;
     const goodBananas = bananas.filter((banana) => {
       const { buyDate } = banana;
-      const expiringDateInUTC = this.calculateExpiringDateInUTC(buyDate);
-      const sellingDateInUTC = this.convertDateToUTC(sellDate);
-      if (expiringDateInUTC > sellingDateInUTC) {
-        return banana;
-      }
+      const expiringDate = this.calculateExpiringDate(buyDate);
+      const isGoodBanana = moment(sellDate).isBefore(expiringDate);
+      return isGoodBanana;
     });
     return goodBananas;
   }
@@ -130,7 +138,8 @@ export default class Buy extends Component {
         bananaCountErrorMessage,
         sellDateErrorMessage,
         inputErrorMessage,
-      }
+      },
+      submitMessage,
     } = this.state;
 
     return (
@@ -145,7 +154,7 @@ export default class Buy extends Component {
             onChange={this.handleChange('bananaCount')}
             variant="outlined"
             fullWidth
-            placeholder="Enter the number of bananas"
+            placeholder="Enter number of bananas"
             error={!!bananaCountErrorMessage}
             helperText={bananaCountErrorMessage}
           />
@@ -176,7 +185,9 @@ export default class Buy extends Component {
               Submit
             </Button>
           </div>
-
+          <div className={styles.submitMessage}>
+            {submitMessage}
+          </div>
         </div>
       </Paper>
     );
