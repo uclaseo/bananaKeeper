@@ -20,16 +20,20 @@ export default class Buy extends Component {
   }
 
   handleSubmit = async (event) => {
-    event.preventDefault();
-    const {
-      bananaCount,
-      buyDate,
-    } = this.state;
-    const response = await axios.post(`${api}/bananas`, {
-      number: +bananaCount,
-      buyDate,
-    });
-    console.log('response.data', response.data);
+    try {
+      event.preventDefault();
+      const {
+        bananaCount,
+        buyDate,
+      } = this.state;
+      const response = await axios.post(`${api}/bananas`, {
+        number: +bananaCount,
+        buyDate,
+      });
+      console.log('response.data', response.data);
+    } catch (error) {
+      console.log('handleSubmit error: ', error);
+    }
   }
 
   render() {

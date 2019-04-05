@@ -6,6 +6,7 @@ import {
 import axios from 'axios';
 
 import { api } from '../../../config.json';
+
 const tenDays = 864000000;
 
 export default class Buy extends Component {
@@ -40,12 +41,16 @@ export default class Buy extends Component {
     } = this.state;
     const goodBananas = this.filterGoodBananas(unsoldBananas);
     const goodBananasCount = goodBananas.length;
-    const response = await axios.put(`${api}/bananas`, {
-      number: goodBananasCount,
-      sellDate,
-    });
+    const hasEnoughBananas = Boolean(bananaCount <= goodBananasCount);
+    if (hasEnoughBananas) {
+      const response = await axios.put(`${api}/bananas`, {
+        number: +bananaCount,
+        sellDate,
+      });
+      console.log('response.data', response.data);
+    }
   }
-  
+
   convertDateToUTC = (date) => {
     const dateArray = date.split('-');
     const year = +dateArray[0];
@@ -53,7 +58,7 @@ export default class Buy extends Component {
     const day = +dateArray[2];
     return Date.UTC(year, month, day);
   }
-  
+
   calculateExpiringDateInUTC = (date) => {
     const dateInUTC = this.convertDateToUTC(date);
     return new Date(dateInUTC + tenDays);
