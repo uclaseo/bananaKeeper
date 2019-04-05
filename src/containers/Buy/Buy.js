@@ -102,7 +102,7 @@ export default class Buy extends Component {
         </div>
         <div className={styles.input}>
           <TextField
-            label="Sold Date"
+            label="Purchased Date"
             value={buyDate}
             onChange={this.handleChange('buyDate')}
             variant="outlined"
