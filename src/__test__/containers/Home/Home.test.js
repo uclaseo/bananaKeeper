@@ -13,5 +13,5 @@ describe('Home component', () => {
   it('should have one div', () => {
     const wrapper = shallow(<Home />);
     expect(wrapper.find('div').length).toBe(1);
-  })
+  });
 });
