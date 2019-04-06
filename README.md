@@ -1,18 +1,33 @@
 # bananaKeeper
 keeps track of banana sales
 
+# Initialization
+```
+npm install
+npm start
+```
 
-server - exports.buy in bananas.js
-moment(buyDate).isValid() doesn't really work
+## Architecture
+ - Views are categorized into two parts: components(stateless) and containers(stateful)
+ - Components are re-usable and could be plugged into many places to avoid redundancy of code
+   -> Forms used in Buy.js and Sell.js could be refactored into a component, and could be re-used in both views.  However, this application has only two containers that utilize such form, so refactoring it into re-usable component could be over-engineering.
+   -> NavigationBar
+ - Containers have states and datas
+   -> Home should be a component since it only has a text now.  However, it could be further developed to present something dynamic such as dashboard showing status of banana inventories, etc. So it is categorized as container for future.
+   -> Buy
+   -> Sell
+   -> Analytics
 
-some of logic implemented in Sell.js could be a lot easier if api controllers are modified such that get request to api/bananas has params/query to modify returned result.  Since all bananas are returned, calculating data in the front end could result in lower performance.
+## Concerns
+ - All calculations are done on front-end
+   -> This will cause a severe performance degradation as the app grows.
+   -> API calls to server are very limited
+   -> Creating more API routes for more specific data in the server side, instead of fetching all bananas and calculate everything on front-end, will improve performance
+ - Only banana
+   -> Created /config.js so that just by changing one line of code, a different item could be applied across the application.  However, many functions are already only specific to banana.  This could be refactored for more compatibility with other items
+ - No Props
+   -> Buy, Sell, and Analytics are all independent of each other.  There are no communication or data flow among them, so passing props from parents to children are not necessary.  For that reason, obvioulsy adding a Redux would be over-engineering.
 
-
-input form in buy and sell are somewhat redundant.  The form could be extracted as a component and used in both places.
-however, this coding challenge only requires two of them, and making it a common component would add complexity that is out of scope.
-
-For the sake of this challenge, only banana is used.  However, prices and expiring times are stored in /config.js to easily adjust prices for futureproof for price/expireDay changes.
-To improve it, codes could be refactored so that any chosen item in /config.js could be reflected across all application with just one line of code change, i.e. all 'banana' codes could be substitued with a config variable.
-
-
-passing props is unnecessary.  they are all having their own states, and it is completely fine in this challenge because none of them rely on each other's state.  
+## Server Bug
+  - exports.buy in bananas.js
+    -> moment(buyDate).isValid() does not always return for wrong date format.  Instead, it should be moment(buyDate, 'YYYY-MM-DD', true).isValid().
