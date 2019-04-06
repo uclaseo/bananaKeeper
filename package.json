@@ -4,7 +4,7 @@
   "description": "keeps track of banana sales",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose",
     "test:watch": "jest --watchAll --verbose",
     "test:coverage": "jest --verbose --coverage",
     "start": "webpack-dev-server --mode development"
