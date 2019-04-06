@@ -5,6 +5,9 @@ keeps track of banana sales
 ```
 npm install
 npm start
+
+// to test
+npm test
 ```
 
 ## Architecture
