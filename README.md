@@ -19,7 +19,7 @@ npm start
    - Analytics
 
 ## Concerns
- - All calculations are done on front-end.
+ - All calculations are done on front-end
    - This will cause a severe performance degradation as the app grows.
    - API calls to server are very limited
    - Creating more API routes for more specific data in the server side, instead of fetching all bananas and calculate everything on front-end, will improve performance
@@ -30,4 +30,10 @@ npm start
 
 ## Server Bug
   - exports.buy in bananas.js
-    -> moment(buyDate).isValid() does not always return for wrong date format.  Instead, it should be moment(buyDate, 'YYYY-MM-DD', true).isValid().
+  ```
+  moment(buyDate).isValid()
+  ```
+  - It does not always return false for wrong date format.  Instead, it should be
+  ```
+  moment(buyDate, 'YYYY-MM-DD', true).isValid()
+  ```
