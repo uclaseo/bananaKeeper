@@ -8,19 +8,20 @@ import {
 import NavigationBar from '../../../components/NavigationBar/NavigationBar';
 
 Enzyme.configure({ adapter: new Adapter() });
+
 describe('NavigationBar component', () => {
-  test('renders', () => {
+  it('should render', () => {
     const wrapper = shallow(<NavigationBar />);
     expect(wrapper.exists()).toBe(true);
   });
 
-  test('has one menu button', () => {
+  it('should have one IconButton', () => {
     const wrapper = shallow(<NavigationBar />);
     const menuButton = wrapper.find(IconButton);
     expect(menuButton.length).toBe(1);
   });
 
-  test('toggles Drawer when IconButton is clicked', () => {
+  it('should toggle open state when IconButton is clicked', () => {
     const wrapper = shallow(<NavigationBar />);
     const menuButton = wrapper.find(IconButton);
     menuButton.simulate('click');
@@ -28,7 +29,7 @@ describe('NavigationBar component', () => {
     expect(drawer.props().open).toEqual(true);
   });
 
-  test('toggles Drawer when IconButton is clicked multiple times', () => {
+  it('should toggle open state when IconButton is clicked multiple times', () => {
     const wrapper = shallow(<NavigationBar />);
     const menuButton = wrapper.find(IconButton);
     menuButton.simulate('click');
