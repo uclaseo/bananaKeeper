@@ -21,11 +21,11 @@ export default class Analytics extends Component {
     currentDate: moment().format('YYYY-MM-DD'),
     badBananas: [],
     goodBananas: [],
-    remainingGoodBananasValue: 0,
-    remainingBadBananasValue: 0,
-    soldBananasCount: 0,
-    totalSoldValue: 0,
-    totalNetValue: 0,
+    remainingGoodBananasValue: '0.00',
+    remainingBadBananasValue: '0.00',
+    soldBananasCount: '0.00',
+    totalSoldValue: '0.00',
+    totalNetValue: '0.00',
   };
 
   componentDidMount() {
@@ -105,7 +105,9 @@ export default class Analytics extends Component {
     return expiringDate;
   }
 
-  calculateValue = (number, value) => { ((number * value).toFixed(2)); }
+  calculateValue = (number, value) => {
+    return (number * value).toFixed(2);
+  }
 
   calculateNetValue = (totalCount, soldCount) => {
     const {
@@ -160,7 +162,6 @@ export default class Analytics extends Component {
               <TableCell>{badBananas.length}</TableCell>
               <TableCell>
                 <span className={styles.secondaryColor}>
-                  -
                   {remainingBadBananasValue}
                 </span>
               </TableCell>
