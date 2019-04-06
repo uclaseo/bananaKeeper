@@ -82,6 +82,7 @@ export default class Buy extends Component {
     const goodBananas = this.filterGoodBananas(unsoldBananas);
     const goodBananasCount = goodBananas.length;
     const hasEnoughBananas = Boolean(bananaCount <= goodBananasCount);
+
     if (!bananaCount || !sellDate) {
       inputErrorMessage = 'Please enter all required fields';
     }
@@ -124,7 +125,10 @@ export default class Buy extends Component {
     const goodBananas = bananas.filter((banana) => {
       const { buyDate } = banana;
       const expiringDate = this.calculateExpiringDate(buyDate);
-      const isGoodBanana = moment(sellDate).isBefore(expiringDate);
+      // sell date should be same or later than buy date
+      // sell date should be before expiring date
+      const isGoodBanana = moment(sellDate).isSameOrAfter(buyDate)
+        && moment(sellDate).isBefore(expiringDate);
       return isGoodBanana;
     });
     return goodBananas;
