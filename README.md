@@ -29,9 +29,9 @@ npm start
    - Buy, Sell, and Analytics are all independent of each other.  There are no communication or data flow among them, so passing props from parents to children are not necessary.  For that reason, obvioulsy adding a Redux would be over-engineering.
 
 ## Server Bug
-  - exports.buy in bananas.js
+  - exports.buy and exports.sell in bananas.js
   ```
-  moment(buyDate).isValid()
+  moment(buyDate).isValid() // line 36 and 73
   ```
   - It does not always return false for wrong date format.  Instead, it should be
   ```
